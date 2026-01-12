@@ -1,49 +1,49 @@
 1️⃣ Repo strukturasi
-common_models/
-├─ common_models/
-│  ├─ __init__.py
-│  ├─ models.py
-│  └─ apps.py
-├─ pyproject.toml
-└─ README.md
+common_models/ \n
+├─ common_models/ \n
+│  ├─ __init__.py \n
+│  ├─ models.py \n
+│  └─ apps.py \n
+├─ pyproject.toml \n
+└─ README.md \n
 
-2️⃣ apps.py
-from django.apps import AppConfig
+2️⃣ apps.py \n
+from django.apps import AppConfig \n
 
-class CommonModelsConfig(AppConfig):
-    name = 'common_models'
+class CommonModelsConfig(AppConfig): \n
+    name = 'common_models' \n
 
-3️⃣ pyproject.toml
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+3️⃣ pyproject.toml \n
+[build-system] \n
+requires = ["setuptools"] \n
+build-backend = "setuptools.build_meta" \n
 
-[project]
-name = "common-models"
-version = "0.1.0"
-dependencies = ["Django>=3.2"]
+[project] \n
+name = "common-models" \n
+version = "0.1.0" \n
+dependencies = ["Django>=3.2"] \n
 
-4️⃣ GitHub’ga push qil
-5️⃣ Django projectda o‘rnatish
-pip install git+https://github.com/you/common_models.git
+4️⃣ GitHub’ga push qil \n
+5️⃣ Django projectda o‘rnatish \n
+pip install git+https://github.com/you/common_models.git \n
 
-6️⃣ INSTALLED_APPS
-INSTALLED_APPS = [
-    ...
-    'common_models',
+6️⃣ INSTALLED_APPS \n
+INSTALLED_APPS = [ \n
+    ... \n
+    'common_models', \n
 ]
+ \n
+7️⃣ Migratsiya \n
+python manage.py makemigrations common_models \n
+python manage.py migrate \n
 
-7️⃣ Migratsiya
-python manage.py makemigrations common_models
-python manage.py migrate
+\n
+✅ Natija: \n
 
+Bitta models.py → ko‘p project \n
 
-✅ Natija:
+Git bilan versiya nazorati \n
 
-Bitta models.py → ko‘p project
+Eng professional yechim \n
 
-Git bilan versiya nazorati
-
-Eng professional yechim
-
-Xohlasang PyPI’ga chiqarish yoki versioning ham qilib beraman.
+Xohlasang PyPI’ga chiqarish yoki versioning ham qilib beraman. \n
