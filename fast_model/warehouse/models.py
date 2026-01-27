@@ -106,6 +106,7 @@ class Product(BaseModel):
     character1 = models.ForeignKey('fast_model.ProductCharacter1', on_delete=models.CASCADE, null=True, blank=True)
     character2 = models.ForeignKey('fast_model.ProductCharacter2', on_delete=models.CASCADE, null=True, blank=True)
     character3 = models.ForeignKey('fast_model.ProductCharacter3', on_delete=models.CASCADE, null=True, blank=True)
+    start_amount = models.FloatField(default=0)
 
     def __str__(self):
         return f"{self.base.name} - {self.amount}"
@@ -119,9 +120,11 @@ class BatchNumber(BaseModel):
     When company works with batch number, this model is used
     """
     product = models.ForeignKey('fast_model.Product', on_delete=models.CASCADE)
+    location = models.ForeignKey('fast_model.ProductLocation', on_delete=models.CASCADE, null=True, blank=True)
     number = models.CharField(max_length=100)
     amount = models.FloatField(default=0)
     year = models.IntegerField(default=0)
+    start_amount = models.FloatField(default=0)
 
     def __str__(self):
         return f"{self.product.base.name} - {self.number}"
@@ -148,7 +151,13 @@ class ProductHistory(BaseModel):
         ("out", _("Out")),
     )
     history_type = models.CharField(max_length=10, choices=HISTORY_TYPE_CHOICES, default="in")
-
+    ACTION_TYPE_CHOICES = (
+        ("shopping", _("Shopping")),
+        ("transfer", _("Transfer")),
+        ("adjustment", _("Adjustment")),
+    )
+    action_type = models.CharField(max_length=10, choices=ACTION_TYPE_CHOICES, default="shopping")
+    
     def __str__(self):
         return f"{self.product.base.name} - {self.amount}"
 

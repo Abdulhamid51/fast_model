@@ -60,7 +60,7 @@ class Payment(BaseModel):
     cash_old = models.FloatField(default=0)
     cash_new = models.FloatField(default=0)
     shopping_paid = models.ForeignKey('fast_model.Shopping', on_delete=models.CASCADE, related_name="shopping_paid", blank=True, null=True)
-    shopping_value = models.ForeignKey('fast_model.Shopping', on_delete=models.CASCADE, related_name="shopping_value", blank=True, null=True)
+    shopping_value = models.OneToOneField('fast_model.Shopping', on_delete=models.CASCADE, related_name="shopping_value", blank=True, null=True)
     person = models.ForeignKey('fast_model.CustomUser', on_delete=models.CASCADE, related_name="payments_person", blank=True, null=True)
     person_old = models.FloatField(default=0)
     person_new = models.FloatField(default=0)
