@@ -50,17 +50,13 @@ class Company(BaseModel):
         verbose_name = _("Company")
         verbose_name_plural = _("Companies")
 
-class CustomUser(models.Model):
+class CustomUser(BaseModel):
     """
     When you want to use user, you should use this model.
     User types:
     super_admin, admin, customer, deliver, partner
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="custom")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
-    company = models.ForeignKey('fast_model.Company', on_delete=models.CASCADE, null=True, blank=True)
     USER_TYPE_CHOICES = (
         ("super_admin", _("Super Admin")),
         ("admin", _("Admin")),
@@ -79,7 +75,7 @@ class CustomUser(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     
     def __str__(self):
-        return self.username
+        return self.user.username
 
     class Meta:
         verbose_name = _("User")
