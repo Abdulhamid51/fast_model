@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser, User
 import math
 import decimal
 import numpy as np
@@ -11,7 +11,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 __all__ = [
-    'models', 'User', 'math', 'decimal', 'np', 
+    'models', 'User', 'AbstractUser', 'math', 'decimal', 'np', 
     'Sum', 'Avg', 'Max', 'Min', 'StdDev', 'Variance',
     'Round', 'Floor', 'Ceil', 'Abs', 'Power', 'Sqrt',
     '_', 'timezone', 'BaseModel', 'admin', 'UserAdmin'
@@ -21,7 +21,13 @@ class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
-    company = models.ForeignKey('fast_model.Company', on_delete=models.CASCADE, null=True, blank=True)
+    company = models.ForeignKey(
+        'fast_model.Company', 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True,
+        related_name="%(app_label)s_%(class)s_related"
+    )
 
     class Meta:
         abstract = True

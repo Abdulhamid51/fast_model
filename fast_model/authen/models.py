@@ -33,10 +33,13 @@ class Company(BaseModel):
     """
     Only Developer can add company!!!
     """
+    # Company modelida company field clash bermasligi uchun uni o'chiramiz yoki related_name beramiz
+    company = None 
+    
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    available_currencies = models.ManyToManyField('fast_model.Currency')
-    available_measures = models.ManyToManyField('fast_model.Measure')
+    available_currencies = models.ManyToManyField('fast_model.Currency', related_name='active_companies')
+    available_measures = models.ManyToManyField('fast_model.Measure', related_name='active_companies')
     local_barcode_length = models.IntegerField(default=12)
     product_character1_name = models.CharField(max_length=300, default="Character 1")
     product_character2_name = models.CharField(max_length=300, default="Character 2")
@@ -50,13 +53,12 @@ class Company(BaseModel):
         verbose_name = _("Company")
         verbose_name_plural = _("Companies")
 
-class CustomUser(BaseModel):
+class CustomUser(AbstractUser, BaseModel):
     """
     When you want to use user, you should use this model.
     User types:
     super_admin, admin, customer, deliver, partner
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="custom")
     USER_TYPE_CHOICES = (
         ("super_admin", _("Super Admin")),
         ("admin", _("Admin")),
@@ -65,17 +67,16 @@ class CustomUser(BaseModel):
         ("partner", _("Partner")),
         ("lead", _("Lead")),
     )
-    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default="customer")
+    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default="customer")
     description = models.TextField(blank=True, null=True)
     address = models.CharField(max_length=200, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
     phone2 = models.CharField(max_length=20, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
     
     def __str__(self):
-        return self.user.username
+        return self.username
 
     class Meta:
         verbose_name = _("User")
