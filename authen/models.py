@@ -158,11 +158,10 @@ class PermissionGroup(BaseModel):
         verbose_name = _("Permission Group")
         verbose_name_plural = _("Permission Groups")
 
-class CustomUser(BaseModel):
+class CustomUser(AbstractUser):
     """
     Profile model for standard Django User.
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="custom")
     USER_TYPE_CHOICES = (
         ("super_admin", _("Super Admin")),
         ("admin", _("Admin")),
@@ -179,9 +178,10 @@ class CustomUser(BaseModel):
     longitude = models.FloatField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
     permission_group = models.ForeignKey(PermissionGroup, on_delete=models.SET_NULL, null=True, blank=True)
+    company = models.ForeignKey('fast_model.Company', on_delete=models.SET_NULL, null=True, blank=True)
     
     def __str__(self):
-        return self.user.username
+        return self.username
 
     class Meta:
         verbose_name = _("Custom User")

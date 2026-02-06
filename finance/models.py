@@ -128,7 +128,7 @@ class Payment(BaseModel):
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.person.username} - {self.amount} - {self.payment_type}"
+        return f"{self.person_account.person.username} - {self.amount} - {self.payment_type}"
 
     class Meta:
         verbose_name = _("Payment")

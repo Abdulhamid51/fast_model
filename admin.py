@@ -1,5 +1,6 @@
 from fast_model.import_libs import *
 from fast_model.models import *
+from django.contrib.auth.admin import UserAdmin
 
 # --- Authen ---
 @admin.register(Currency)
@@ -25,33 +26,7 @@ class CustomUserInline(admin.StackedInline):
     can_delete = False
     verbose_name_plural = 'Custom User Info'
 
-# Standart UserAdmin ni kengaytirish
-class MyUserAdmin(UserAdmin):
-    inlines = (CustomUserInline,)
-    list_display = UserAdmin.list_display + ('get_user_type', 'get_company')
-    
-    def get_user_type(self, obj):
-        return obj.custom.user_type if hasattr(obj, 'custom') else '-'
-    get_user_type.short_description = 'User Type'
 
-    def get_company(self, obj):
-        return obj.custom.company if hasattr(obj, 'custom') else '-'
-    get_company.short_description = 'Company'
-
-# CustomUser ni alohida ham ko'rish imkoniyati
-@admin.register(CustomUser)
-class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('get_username', 'user_type', 'company', 'is_active')
-    list_filter = ('user_type', 'company', 'is_active')
-    search_fields = ('user__username', 'user__email')
-
-    def get_username(self, obj):
-        return obj.user.username
-    get_username.short_description = 'Username'
-
-# Standart UserAdmin ni qayta ro'yxatdan o'tkazish (agar kerak bo'lsa asosiy loyihada qilinadi)
-# admin.site.unregister(User)
-# admin.site.register(User, MyUserAdmin)
 
 # --- Warehouse ---
 @admin.register(ProductCategory)
@@ -119,9 +94,9 @@ class ConversionAdmin(admin.ModelAdmin):
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('person', 'amount', 'payment_type', 'is_paid', 'custom_date', 'company')
+    list_display = ('person_account', 'amount', 'payment_type', 'is_paid', 'custom_date', 'company')
     list_filter = ('payment_type', 'is_paid', 'company')
-    search_fields = ('person__username', 'description')
+    search_fields = ('person_account__person__username', 'description')
 
 # --- Sale ---
 @admin.register(ShoppingStatus)
@@ -144,6 +119,29 @@ class ShoppingItemAdmin(admin.ModelAdmin):
     list_display = ('product', 'shopping', 'amount', 'price', 'total_price')
     list_filter = ('shopping__shopping_type', 'company')
 
+# CustomUser admin registration
+@admin.register(CustomUser)
+class CustomUserAdmin(UserAdmin):
+    model = CustomUser
+    list_display = ('username', 'email', 'user_type', 'company', 'is_active')
+    list_filter = ('user_type', 'company', 'is_active')
+    search_fields = ('username', 'email')
+
+    fieldsets = UserAdmin.fieldsets + (
+        ('Additional info', {
+            'fields': (
+                'user_type', 'description', 'address', 'phone', 'phone2',
+                'longitude', 'latitude', 'permission_group', 'company'
+            )
+        }),
+    )
+
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        ('Additional info', {
+            'classes': ('wide',),
+            'fields': ('user_type', 'permission_group', 'company'),
+        }),
+    )
 # Character models (minimal admin)
 admin.site.register(ProductCharacter1)
 admin.site.register(ProductCharacter2)
